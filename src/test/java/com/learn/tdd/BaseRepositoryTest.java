@@ -7,9 +7,11 @@ import org.assertj.db.type.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @AutoConfigureEmbeddedDatabase(
@@ -21,7 +23,7 @@ public class BaseRepositoryTest {
     @Autowired
     private DataSource dataSource;
 
-    protected RequestAssert dbAssertThat(String sql) {
-        return Assertions.assertThat(new Request(dataSource, sql));
+    protected RequestAssert dbAssertThat(String sql, Object... params) {
+        return Assertions.assertThat(new Request(dataSource, sql, params));
     }
 }

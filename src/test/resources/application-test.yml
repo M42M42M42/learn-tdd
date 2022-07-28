@@ -1,0 +1,2 @@
+api:
+  disable-mandatory-header-checking: true

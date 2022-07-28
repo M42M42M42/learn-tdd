@@ -1,0 +1,1 @@
+insert into ACCOUNTS(id, username, password) values ('id', 'TestUser', 'password');
