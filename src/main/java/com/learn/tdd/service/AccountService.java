@@ -11,6 +11,9 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     public void register(String username, String password) {
+        if (accountRepository.findByUsername(username).isPresent()) {
+            throw new RuntimeException("用户名已使用");
+        }
         accountRepository.save(new Account(username, password));
     }
 }
