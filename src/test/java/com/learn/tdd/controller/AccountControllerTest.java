@@ -61,4 +61,16 @@ public class AccountControllerTest extends BaseApiTest {
         given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
                 .body(equalTo("用户名错误"));
     }
+
+    @Test
+    void should_return_password_error_when_register_given_password_len_less_than_8() {
+        // given
+        AccountRequest request = new AccountRequest();
+        request.setUsername("TestUser");
+        request.setPassword("pwd");
+
+        // when then
+        given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
+                .body(equalTo("密码错误"));
+    }
 }

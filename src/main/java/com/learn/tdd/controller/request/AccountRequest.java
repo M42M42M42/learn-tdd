@@ -10,8 +10,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class AccountRequest {
     private static final String USERNAME_ERROR = "用户名错误";
+    private static final String PASSWORD_ERROR = "密码错误";
     @NotNull(message = USERNAME_ERROR)
     @Length(min = 6, max = 32, message = USERNAME_ERROR)
     private String username;
+    @NotNull(message = PASSWORD_ERROR)
+    @Length(min = 8, message = PASSWORD_ERROR)
     private String password;
 }
