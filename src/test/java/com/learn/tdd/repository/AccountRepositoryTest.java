@@ -5,13 +5,18 @@ import com.learn.tdd.BaseRepositoryTest;
 import com.learn.tdd.entity.Account;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AccountRepositoryTest extends BaseRepositoryTest {
     @Autowired
     private AccountRepository accountRepository;
 
     @Test
-    void should_return_account_when_find_by_username_given_an_exist_username() {
+    void should_save_success_when_save_given_an_username_and_password() {
         // given
         Account account = new Account("test", "password");
 
@@ -20,5 +25,15 @@ class AccountRepositoryTest extends BaseRepositoryTest {
 
         // then
         dbAssertThat("select * from accounts where username='test'").hasNumberOfRows(1);
+    }
+
+    @Test
+    @Sql("classpath:sql/insertUserToDb.sql")
+    void should_return_account_when_findByUsername_given_and_exist_username() {
+        // when
+        Optional<Account> account = accountRepository.findByUsername("TestUser");
+
+        // then
+        assertThat(account.isPresent()).isTrue();
     }
 }
