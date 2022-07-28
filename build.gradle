@@ -30,6 +30,7 @@ dependencies {
     testImplementation 'io.zonky.test:embedded-postgres:2.0.0'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'io.rest-assured:spring-mock-mvc'
+    testImplementation 'org.assertj:assertj-db:2.0.2'
 }
 
 tasks.named('test') {
