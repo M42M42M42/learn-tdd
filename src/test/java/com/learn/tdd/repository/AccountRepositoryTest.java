@@ -18,13 +18,13 @@ class AccountRepositoryTest extends BaseRepositoryTest {
     @Test
     void should_save_success_when_save_given_an_username_and_password() {
         // given
-        Account account = new Account("test", "password");
+        Account account = new Account("TestUser", "password");
 
         // when
         accountRepository.save(account);
 
         // then
-        dbAssertThat("select * from accounts where username='test'").hasNumberOfRows(1);
+        dbAssertThat("select * from accounts where username='TestUser'").hasNumberOfRows(1);
     }
 
     @Test

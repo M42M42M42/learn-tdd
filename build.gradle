@@ -32,6 +32,7 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'io.rest-assured:spring-mock-mvc'
     testImplementation 'org.assertj:assertj-db:2.0.2'
+    testImplementation 'com.h2database:h2:2.1.210'
 }
 
 tasks.named('test') {
