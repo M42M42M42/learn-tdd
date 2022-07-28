@@ -1,4 +1,5 @@
 # 用户名大于6位小于32，密码大于8位小于24位，且用户名没有被使用可以注册成功
+``` 标题是按照业务做的tasking，每个业务task下面是按照技术做的tasking ```
 ### 1. given 有效的用户名和有效的密码 when 注册 then 注册成功
 * Repository：given 非空用户名和非空密码 when 保存用户数据 then 成功保存到数据库
 * Service：given 有效的用户名和有效的密码 when 注册 then 成功注册
