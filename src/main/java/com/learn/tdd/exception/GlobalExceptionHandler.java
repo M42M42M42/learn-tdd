@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @ResponseBody
@@ -40,6 +41,6 @@ public class GlobalExceptionHandler {
         if (CollectionUtils.isEmpty(errors)) {
             return exception.getMessage();
         }
-        return errors.get(0).getDefaultMessage();
+        return errors.stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AccountControllerTest extends BaseApiTest {
@@ -93,8 +94,11 @@ public class AccountControllerTest extends BaseApiTest {
         request.setUsername("user");
         request.setPassword("pwd");
 
-        // when then
-        given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
-                .body(equalTo("用户名错误"));
+        // when
+        String error = given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
+                .extract().asString();
+
+        // then
+        assertThat(error).contains("用户名错误", "密码错误");
     }
 }
