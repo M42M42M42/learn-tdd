@@ -49,4 +49,16 @@ public class AccountControllerTest extends BaseApiTest {
         given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
                 .body(equalTo("用户名错误"));
     }
+
+    @Test
+    void should_return_username_error_when_register_given_username_len_greater_than_32() {
+        // given
+        AccountRequest request = new AccountRequest();
+        request.setUsername("useruseruseruseruseruseruseruseruser");
+        request.setPassword("password001");
+
+        // when then
+        given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
+                .body(equalTo("用户名错误"));
+    }
 }

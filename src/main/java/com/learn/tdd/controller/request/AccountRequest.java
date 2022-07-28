@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class AccountRequest {
     private static final String USERNAME_ERROR = "用户名错误";
     @NotNull(message = USERNAME_ERROR)
-    @Length(min = 6, message = USERNAME_ERROR)
+    @Length(min = 6, max = 32, message = USERNAME_ERROR)
     private String username;
     private String password;
 }
