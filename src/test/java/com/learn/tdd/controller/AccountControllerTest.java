@@ -73,4 +73,16 @@ public class AccountControllerTest extends BaseApiTest {
         given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
                 .body(equalTo("密码错误"));
     }
+
+    @Test
+    void should_return_password_error_when_register_given_password_len_greater_than_32() {
+        // given
+        AccountRequest request = new AccountRequest();
+        request.setUsername("TestUser");
+        request.setPassword("passwordpasswordpassword1");
+
+        // when then
+        given().body(request).post(REGISTER_URL).then().status(HttpStatus.BAD_REQUEST)
+                .body(equalTo("密码错误"));
+    }
 }

@@ -15,6 +15,6 @@ public class AccountRequest {
     @Length(min = 6, max = 32, message = USERNAME_ERROR)
     private String username;
     @NotNull(message = PASSWORD_ERROR)
-    @Length(min = 8, message = PASSWORD_ERROR)
+    @Length(min = 8, max = 24, message = PASSWORD_ERROR)
     private String password;
 }
