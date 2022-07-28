@@ -15,4 +15,6 @@
 * Controller：given 一个有效的用户名和小于8位的密码 when 注册 then 返回<密码错误>，httpStatus：400
 ### 6. given 一个有效的用户名和大于24位的密码 when 注册 then 返回<密码错误>，httpStatus：400
 * Controller：given 一个有效的用户名和大于24位的密码 when 注册 then 返回<密码错误>，httpStatus：400
+### 7. given 无效的用户名和无效的密码 when 注册 then 返回<用户名错误>, httpStatus: 400
+* Controller: given 无效的用户名和无效的密码 when 注册 then 返回<用户名错误>, httpStatus: 400
 
