@@ -208,11 +208,11 @@ public class AccountControllerTest extends BaseApiTest {
 
     @Test
     void should_return_repeat_letter_error_when_validate_given_password_not_contains_repeat_letter() {
-        String password = Base64.getEncoder().encodeToString("AAAsvx1dQWEDCVGSDFG@$".getBytes(StandardCharsets.UTF_8));
+        String password = Base64.getEncoder().encodeToString("AAAsvx1dQWEaCVGSDFG@$".getBytes(StandardCharsets.UTF_8));
 
         String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
                 .then().status(HttpStatus.BAD_REQUEST).extract().asString();
 
-        assertThat(result).isEqualTo("连续字符不能超过两个");
+        assertThat(result).isEqualTo("连续相同字符不能超过两个");
     }
 }
