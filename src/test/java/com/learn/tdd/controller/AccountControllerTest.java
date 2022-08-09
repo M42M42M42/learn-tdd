@@ -2,15 +2,21 @@ package com.learn.tdd.controller;
 
 import com.learn.tdd.BaseApiTest;
 import com.learn.tdd.controller.request.AccountRequest;
+import com.learn.tdd.controller.request.PasswordValidateRequest;
+import com.learn.tdd.service.PasswordValidateService;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AccountControllerTest extends BaseApiTest {
     private static final String REGISTER_URL = "/accounts/register";
+    private static final String PASSWORD_VALIDATE_URL = "/accounts/password/validate";
 
     @Test
     void should_register_success_when_register_given_valid_username_and_valid_password() {
@@ -100,5 +106,113 @@ public class AccountControllerTest extends BaseApiTest {
 
         // then
         assertThat(error).contains("用户名错误", "密码错误");
+    }
+
+    @Test
+    void should_return_success_when_validate_given_valid_password() {
+        String password = Base64.getEncoder().encodeToString("Aqw13579$@12a".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.OK).extract().asString();
+
+        assertThat(result).isEqualTo(PasswordValidateService.SUCCESS);
+    }
+
+    @Test
+    void should_return_len_error_when_validate_given_null_password() {
+        String result = given().body(new PasswordValidateRequest()).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码长度必需在12~24");
+    }
+
+    @Test
+    void should_return_len_error_when_validate_given_password_len_less_than_12() {
+        String password = Base64.getEncoder().encodeToString("123".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码长度必需在12~24");
+    }
+
+    @Test
+    void should_return_len_error_when_validate_given_password_len_greater_than_24() {
+        String password = Base64.getEncoder().encodeToString("123456789012345678901234567890".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码长度必需在12~24");
+    }
+
+    @Test
+    void should_return_pattern_error_when_validate_given_password_not_contains_uppercase_letter() {
+        String password = Base64.getEncoder().encodeToString("ab12qwedcvgsdfghj".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码必需包含大写字母、小写字母、数字和特殊字符");
+    }
+
+    @Test
+    void should_return_pattern_error_when_validate_given_password_not_contains_lowercase_letter() {
+        String password = Base64.getEncoder().encodeToString("AB12QWEDCVGSDFGHJ".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码必需包含大写字母、小写字母、数字和特殊字符");
+    }
+
+    @Test
+    void should_return_pattern_error_when_validate_given_password_not_contains_number_letter() {
+        String password = Base64.getEncoder().encodeToString("ABasvxdQWEDCVGSDFGHJ".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码必需包含大写字母、小写字母、数字和特殊字符");
+    }
+
+    @Test
+    void should_return_pattern_error_when_validate_given_password_not_contains_special_letter() {
+        String password = Base64.getEncoder().encodeToString("ABasvxdQWEDCVGSDFG@$".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("密码必需包含大写字母、小写字母、数字和特殊字符");
+    }
+
+    @Test
+    void should_return_unexpected_letter_error_when_validate_given_password_not_contains_unexpected_letter() {
+        String password = Base64.getEncoder().encodeToString("ABasv1xdQWECVGSDFG@$?".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("特殊字符只能包含：!@#$%&+=:;");
+    }
+
+    @Test
+    void should_return_continuous_letter_error_when_validate_given_password_not_contains_continuous_letter() {
+        String password = Base64.getEncoder().encodeToString("ABCsv1xdQWEDCVGSDFG@$".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("连续字符不能超过两个");
+    }
+
+    @Test
+    void should_return_repeat_letter_error_when_validate_given_password_not_contains_repeat_letter() {
+        String password = Base64.getEncoder().encodeToString("AAAsvx1dQWEDCVGSDFG@$".getBytes(StandardCharsets.UTF_8));
+
+        String result = given().body(new PasswordValidateRequest(password)).post(PASSWORD_VALIDATE_URL)
+                .then().status(HttpStatus.BAD_REQUEST).extract().asString();
+
+        assertThat(result).isEqualTo("连续字符不能超过两个");
     }
 }
