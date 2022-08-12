@@ -46,4 +46,13 @@ class AccountServiceTest extends BaseUnitTest {
         // when then
         accountService.login(USERNAME, PASSWORD);
     }
+
+    @Test
+    void should_throw_exception_when_login_given_an_unregistered_username() {
+        // given
+        given(accountRepository.findPasswordByUsername(USERNAME)).willReturn(Optional.empty());
+
+        // when, then
+        assertThrows(RuntimeException.class, () -> accountService.login(USERNAME, PASSWORD), "用户名或密码错误");
+    }
 }
