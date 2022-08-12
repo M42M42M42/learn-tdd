@@ -46,4 +46,14 @@ class AccountRepositoryTest extends BaseRepositoryTest {
         // then
         assertThat(password.isPresent()).isTrue();
     }
+
+    @Test
+    @Sql("classpath:sql/insertUserToDb.sql")
+    void should_return_empty_when_findPasswordByUsername_given_an_unregistered_username() {
+        // when
+        Optional<String> password = accountRepository.findPasswordByUsername("TestUser001");
+
+        // then
+        assertThat(password.isPresent()).isFalse();
+    }
 }
