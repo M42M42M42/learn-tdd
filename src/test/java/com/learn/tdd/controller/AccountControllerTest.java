@@ -240,4 +240,17 @@ public class AccountControllerTest extends BaseApiTest {
         given().body(request).post("/accounts/login").then().status(HttpStatus.BAD_REQUEST)
                 .body(equalTo("用户名或密码错误"));
     }
+
+    @Test
+    @Sql("classpath:sql/insertUserToDb.sql")
+    void should_return_400_when_login_given_unregistered_username_and_any_password() {
+        // given
+        AccountRequest request = new AccountRequest();
+        request.setUsername("TestUser001");
+        request.setPassword("password");
+
+        // when, then
+        given().body(request).post("/accounts/login").then().status(HttpStatus.BAD_REQUEST)
+                .body(equalTo("用户名或密码错误"));
+    }
 }
