@@ -45,4 +45,9 @@ public class AccountController {
         }
         return ResponseEntity.badRequest().body(message);
     }
+
+    @PostMapping("/login")
+    public void login(@RequestBody @Valid AccountRequest account) {
+        accountService.login(account.getUsername(), account.getPassword());
+    }
 }

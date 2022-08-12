@@ -215,4 +215,16 @@ public class AccountControllerTest extends BaseApiTest {
 
         assertThat(result).isEqualTo("连续相同字符不能超过两个");
     }
+
+    @Test
+    @Sql("classpath:sql/insertUserToDb.sql")
+    void should_login_success_when_login_given_valid_username_and_valid_password() {
+        // given
+        AccountRequest request = new AccountRequest();
+        request.setUsername("TestUser");
+        request.setPassword("password");
+
+        // when, then
+        given().body(request).post("/accounts/login").then().status(HttpStatus.OK);
+    }
 }
