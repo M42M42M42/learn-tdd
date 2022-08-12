@@ -6,7 +6,9 @@ import com.learn.tdd.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,5 +36,14 @@ class AccountServiceTest extends BaseUnitTest {
 
         // when
         assertThrows(RuntimeException.class, () -> accountService.register(USERNAME, PASSWORD), "用户名已使用");
+    }
+
+    @Test
+    void should_login_success_when_login_given_username_and_password_valid() {
+        // given
+        given(accountRepository.findPasswordByUsername(USERNAME)).willReturn(Optional.of(PASSWORD));
+
+        // when then
+        accountService.login(USERNAME, PASSWORD);
     }
 }
