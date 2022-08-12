@@ -16,7 +16,7 @@ class AccountRepositoryTest extends BaseRepositoryTest {
     private AccountRepository accountRepository;
 
     @Test
-    void should_save_success_when_save_given_an_username_and_password() {
+    void should_save_success_when_save_given_username_and_password() {
         // given
         Account account = new Account("TestUser", "password");
 
@@ -29,7 +29,7 @@ class AccountRepositoryTest extends BaseRepositoryTest {
 
     @Test
     @Sql("classpath:sql/insertUserToDb.sql")
-    void should_return_account_when_findByUsername_given_and_exist_username() {
+    void should_return_account_when_findByUsername_given_registered_username() {
         // when
         Optional<Account> account = accountRepository.findByUsername("TestUser");
 
@@ -39,7 +39,7 @@ class AccountRepositoryTest extends BaseRepositoryTest {
 
     @Test
     @Sql("classpath:sql/insertUserToDb.sql")
-    void should_return_password_when_findPasswordByUsername_given_an_exist_username() {
+    void should_return_password_when_findPasswordByUsername_given_registered_username() {
         // when
         Optional<String> password = accountRepository.findPasswordByUsername("TestUser");
 
@@ -49,7 +49,7 @@ class AccountRepositoryTest extends BaseRepositoryTest {
 
     @Test
     @Sql("classpath:sql/insertUserToDb.sql")
-    void should_return_empty_when_findPasswordByUsername_given_an_unregistered_username() {
+    void should_return_empty_when_findPasswordByUsername_given_unregistered_username() {
         // when
         Optional<String> password = accountRepository.findPasswordByUsername("TestUser001");
 

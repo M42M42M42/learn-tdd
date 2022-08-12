@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class AccountControllerTest extends BaseApiTest {
     private static final String REGISTER_URL = "/accounts/register";
     private static final String PASSWORD_VALIDATE_URL = "/accounts/password/validate";
+    private static final String LOGIN_URL = "/accounts/login";
 
     @Test
     void should_register_success_when_register_given_valid_username_and_valid_password() {
@@ -26,7 +27,7 @@ public class AccountControllerTest extends BaseApiTest {
         request.setPassword("password001");
 
         // when
-        given().body(request).post("/accounts/register").then().status(HttpStatus.OK);
+        given().body(request).post(REGISTER_URL).then().status(HttpStatus.OK);
 
         // then
         dbAssertThat("select * from accounts where username = ?", request.getUsername()).hasNumberOfRows(1);
@@ -218,26 +219,26 @@ public class AccountControllerTest extends BaseApiTest {
 
     @Test
     @Sql("classpath:sql/insertUserToDb.sql")
-    void should_login_success_when_login_given_valid_username_and_valid_password() {
+    void should_login_success_when_login_given_registered_username_and_valid_password() {
         // given
         AccountRequest request = new AccountRequest();
         request.setUsername("TestUser");
         request.setPassword("password");
 
         // when, then
-        given().body(request).post("/accounts/login").then().status(HttpStatus.OK);
+        given().body(request).post(LOGIN_URL).then().status(HttpStatus.OK);
     }
 
     @Test
     @Sql("classpath:sql/insertUserToDb.sql")
-    void should_return_400_when_login_given_valid_username_and_invalid_password() {
+    void should_return_400_when_login_given_registered_username_and_invalid_password() {
         // given
         AccountRequest request = new AccountRequest();
         request.setUsername("TestUser");
         request.setPassword("password001");
 
         // when, then
-        given().body(request).post("/accounts/login").then().status(HttpStatus.BAD_REQUEST)
+        given().body(request).post(LOGIN_URL).then().status(HttpStatus.BAD_REQUEST)
                 .body(equalTo("用户名或密码错误"));
     }
 
@@ -250,7 +251,7 @@ public class AccountControllerTest extends BaseApiTest {
         request.setPassword("password");
 
         // when, then
-        given().body(request).post("/accounts/login").then().status(HttpStatus.BAD_REQUEST)
+        given().body(request).post(LOGIN_URL).then().status(HttpStatus.BAD_REQUEST)
                 .body(equalTo("用户名或密码错误"));
     }
 }

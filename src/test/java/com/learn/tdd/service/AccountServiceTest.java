@@ -6,9 +6,7 @@ import com.learn.tdd.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,13 +22,13 @@ class AccountServiceTest extends BaseUnitTest {
     private AccountService accountService;
 
     @Test
-    void should_register_success_when_register_given_username_and_password_valid() {
+    void should_register_success_when_register_given_valid_username_and_valid_password() {
         // given when then
         accountService.register(USERNAME, PASSWORD);
     }
 
     @Test
-    void should_throw_exception_when_register_given_an_exist_username() {
+    void should_throw_exception_when_register_given_registered_username() {
         // given
         given(accountRepository.findByUsername(anyString())).willReturn(Optional.of(new Account()));
 
@@ -39,7 +37,7 @@ class AccountServiceTest extends BaseUnitTest {
     }
 
     @Test
-    void should_login_success_when_login_given_username_and_password_valid() {
+    void should_login_success_when_login_given_valid_username_and_valid_password() {
         // given
         given(accountRepository.findPasswordByUsername(USERNAME)).willReturn(Optional.of(PASSWORD));
 
